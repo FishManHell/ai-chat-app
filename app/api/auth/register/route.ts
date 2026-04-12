@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { connectDB } from "@/shared/lib/db"
+import { registerLimiter } from "@/shared/lib/rate-limit"
 import UserModel from "@/models/User"
 
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") ?? "unknown"
+    const { allowed } = registerLimiter(ip)
+
+    if (!allowed) {
+      return NextResponse.json(
+        { message: "Too many requests. Try again later." },
+        { status: 429 }
+      )
+    }
+
     const { username, email, password } = await request.json()
 
     if (!username || !email || !password) {
