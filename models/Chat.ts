@@ -28,7 +28,6 @@ const chatSchema = new Schema<IChat>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      index: true,
     },
     title: {
       type: String,
@@ -40,6 +39,8 @@ const chatSchema = new Schema<IChat>(
   },
   { timestamps: true }
 )
+
+chatSchema.index({ userId: 1, updatedAt: -1 })
 
 const ChatModel =
   (mongoose.models.Chat as mongoose.Model<IChat>) ||
