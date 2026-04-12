@@ -1,6 +1,6 @@
 {
   "name": "ai-chat-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,11 +14,13 @@
     "@types/bcryptjs": "^3.0.0",
     "ai": "^6.0.158",
     "bcryptjs": "^3.0.3",
+    "clsx": "^2.1.1",
     "mongoose": "^9.4.1",
     "next": "16.2.3",
     "next-auth": "^4.24.13",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
