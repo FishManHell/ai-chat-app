@@ -6,11 +6,11 @@ interface RateLimitEntry {
 const store = new Map<string, RateLimitEntry>()
 
 interface RateLimitOptions {
-  readonly maxRequests: number
-  readonly windowMs: number
+  maxRequests: number
+  windowMs: number
 }
 
-export function rateLimit({ maxRequests, windowMs }: RateLimitOptions) {
+export function rateLimit({ maxRequests, windowMs }: Readonly<RateLimitOptions>) {
   return function check(key: string): { allowed: boolean; remaining: number } {
     const now = Date.now()
     const entry = store.get(key)
