@@ -6,22 +6,23 @@ A full-stack AI chat application built with Next.js, React, and Google Gemini. P
 
 | Layer | Technology |
 |---|---|
-| Framework | Next.js 15 (App Router) |
-| UI | React + TypeScript |
-| Styling | Tailwind CSS |
+| Framework | Next.js 16 (App Router, Turbopack) |
+| UI | React 19 + TypeScript |
+| Styling | Tailwind CSS v4 |
 | Components | Shadcn/UI |
 | Auth | NextAuth.js (Credentials + Google OAuth) |
-| AI | Google Gemini via Vercel AI SDK |
-| Database | MongoDB + Mongoose |
-| Testing | Vitest + React Testing Library |
+| AI | Google Gemini 2.5 Flash via Vercel AI SDK v4 |
+| Database | MongoDB Atlas + Mongoose |
 
 ## Features
 
 - Real-time AI chat with streaming responses
-- User authentication (email/password + Google)
-- Chat history management (create, rename, delete)
-- Custom theme system with color picker (Aurora theme)
+- User authentication (email/password + Google OAuth)
+- Chat history management (create, delete)
+- Custom theme system with color picker and presets
+- Glassmorphism dark UI with aurora gradient accents
 - Responsive design (mobile, tablet, desktop)
+- Rate limiting and input sanitization
 
 ## Architecture
 
@@ -34,9 +35,9 @@ app/ → widgets/ → features/ → entities/ → shared/
 ## Getting Started
 
 ```bash
-npm install
+yarn install
 cp .env.example .env.local  # fill in your keys
-npm run dev
+yarn dev
 ```
 
 ## Environment Variables

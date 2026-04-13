@@ -19,16 +19,16 @@ Similar to ChatGPT — personal, self-hosted, portfolio-ready.
 
 ## Stack
 
-| Layer       | Technology                         |
-|------------|-------------------------------------|
-| Framework  | Next.js (App Router)                |
-| UI         | React + TypeScript                  |
-| Styling    | Tailwind CSS                        |
-| Components | Shadcn/UI                           |
-| Auth       | NextAuth.js (Credentials + Google)  |
-| AI         | Google Gemini API via Vercel AI SDK  |
-| Database   | MongoDB + Mongoose                  |
-| Testing    | Vitest + React Testing Library      |
+| Layer       | Technology                                    |
+|------------|------------------------------------------------|
+| Framework  | Next.js 16 (App Router, Turbopack)             |
+| UI         | React 19 + TypeScript                          |
+| Styling    | Tailwind CSS v4                                |
+| Components | Shadcn/UI (base-nova style)                    |
+| Auth       | NextAuth.js (Credentials + Google)             |
+| AI         | Google Gemini 2.5 Flash via Vercel AI SDK v4   |
+| Database   | MongoDB Atlas + Mongoose                       |
+| Font       | Inter (latin + cyrillic)                       |
 
 ## Architecture: Adapted FSD for Next.js
 
@@ -48,84 +48,75 @@ down to entities/ or shared/.
 ```
 ai-chat-app/
 ├── app/                              # Routing only, minimal logic
-│   ├── layout.tsx
-│   ├── page.tsx
+│   ├── layout.tsx                    # Root: Inter font, SessionProvider, ThemeProvider, Toaster, FOUC script
+│   ├── page.tsx                      # Landing page
+│   ├── globals.css                   # CSS variables, theme tokens, scrollbar
 │   ├── (auth)/
+│   │   ├── layout.tsx                # Glassmorphism auth layout with glow blobs
 │   │   ├── login/page.tsx
 │   │   └── register/page.tsx
 │   ├── chat/
 │   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   └── [chatId]/page.tsx
+│   │   ├── page.tsx                  # Server: fetches chats, renders ChatWindow
+│   │   └── [chatId]/page.tsx         # Server: loads chat + messages from DB
 │   └── api/
-│       ├── auth/[...nextauth]/route.ts
+│       ├── auth/
+│       │   ├── [...nextauth]/route.ts
+│       │   └── register/route.ts
 │       └── chat/
-│           ├── route.ts
-│           └── [chatId]/route.ts
+│           ├── route.ts              # POST: stream AI response, save to DB
+│           ├── [chatId]/route.ts     # DELETE: remove chat
+│           └── latest/route.ts       # GET: latest chat ID for redirect
 │
 ├── widgets/                          # Page-level compositions
 │   └── chat/
-│       └── ChatWindow.tsx
+│       └── ChatWindow.tsx            # useChat + DefaultChatTransport, messages, input, sidebar
 │
 ├── features/                         # User actions
-│   ├── auth/
-│   │   ├── components/
-│   │   │   ├── LoginForm.tsx
-│   │   │   └── RegisterForm.tsx
-│   │   └── lib/
-│   │       └── auth-actions.ts
-│   ├── send-message/
-│   │   ├── components/
-│   │   │   └── ChatInput.tsx
-│   │   └── lib/
-│   │       └── send-message.ts
+│   ├── auth/components/
+│   │   ├── LoginForm.tsx
+│   │   └── RegisterForm.tsx
+│   ├── send-message/components/
+│   │   └── ChatInput.tsx             # Auto-growing textarea, own useState for input
 │   ├── manage-chats/
-│   │   ├── components/
-│   │   │   └── ChatSidebar.tsx
-│   │   └── lib/
-│   │       └── chat-actions.ts
+│   │   ├── components/ChatSidebar.tsx  # Responsive sidebar, chat list, user section
+│   │   └── lib/chat-actions.ts         # Server actions: getChats, deleteChat
 │   └── customize-theme/
-│       ├── components/
-│       │   ├── ThemeCustomizer.tsx    # Panel with color pickers
-│       │   └── ColorPicker.tsx
-│       └── lib/
-│           └── apply-theme.ts        # Writes CSS variables to :root
+│       ├── components/ThemeCustomizer.tsx  # Slide-in panel, presets, react-colorful picker
+│       └── lib/apply-theme.ts             # CSS var setter, hex↔hsl converters
 │
 ├── entities/                         # Business data & base components
 │   ├── user/
-│   │   ├── components/
-│   │   │   └── UserAvatar.tsx
-│   │   ├── lib/
-│   │   │   └── auth-config.ts
+│   │   ├── components/UserAvatar.tsx
+│   │   ├── lib/auth-config.ts        # NextAuth options
 │   │   └── types.ts
 │   ├── chat/
-│   │   ├── components/
-│   │   │   └── ChatItem.tsx
+│   │   ├── components/ChatItem.tsx    # div[role="button"] to avoid nested button
 │   │   └── types.ts
 │   ├── message/
-│   │   ├── components/
-│   │   │   └── MessageBubble.tsx
+│   │   ├── components/MessageBubble.tsx
 │   │   └── types.ts
 │   └── theme/
-│       ├── components/
-│       │   └── ThemeProvider.tsx      # Applies saved theme on load
-│       ├── lib/
-│       │   └── theme-storage.ts      # Read/write localStorage
-│       └── types.ts
+│       ├── components/ThemeProvider.tsx   # Applies saved theme on mount
+│       ├── lib/theme-storage.ts          # localStorage read/save/remove
+│       └── types.ts                      # ThemeColors, CustomTheme interfaces
 │
 ├── shared/                           # Used by everything
-│   ├── ui/                           # Shadcn/UI components
+│   ├── ui/                           # Shadcn/UI components (configured via components.json)
 │   ├── lib/
-│   │   ├── db.ts
-│   │   └── utils.ts
+│   │   ├── db.ts                     # MongoDB connection (env check inside function)
+│   │   ├── utils.ts                  # cn() helper
+│   │   ├── rate-limit.ts             # In-memory rate limiter
+│   │   ├── sanitize.ts               # sanitize-html wrapper
+│   │   └── session-provider.tsx      # Client wrapper for NextAuth SessionProvider
 │   └── types/
-│       └── index.ts
+│       └── next-auth.d.ts            # Session type augmentation
 │
 ├── models/                           # Mongoose models (server-only)
 │   ├── User.ts
 │   └── Chat.ts
 │
-└── middleware.ts
+└── proxy.ts                          # Next.js 16 proxy config (replaces middleware)
 ```
 
 ### What goes where
@@ -139,82 +130,68 @@ ai-chat-app/
 
 ## Import Rules
 
-**Within the same slice — relative path:**
-```tsx
-import type { Message } from "../types"
-import { formatTime } from "../lib/utils"
-```
-
-**Between layers — absolute path with @/:**
-```tsx
-import { MessageBubble } from "@/entities/message/components/MessageBubble"
-import { Button } from "@/shared/ui/button"
-```
-
-Cross-feature imports are forbidden. If shared logic is needed, move it
-down to entities/ or shared/.
+- **Within the same slice** — use relative paths (`../types`, `../lib/utils`)
+- **Between layers** — use absolute paths with `@/` prefix (`@/entities/message/components/MessageBubble`, `@/shared/ui/button`)
+- Cross-feature imports are forbidden. If shared logic is needed, move it down to entities/ or shared/.
 
 ## TypeScript Rules
 
 ### Types live separately
 Every slice has its own `types.ts`. Shared reusable types go in
-`shared/types/index.ts`. Never define types inside components.
+`shared/types/`. Never define types inside components.
+
+### Props pattern
+Define a clean interface for props, then apply `Readonly<>` at the function
+parameter level — not `readonly` on each field individually.
 
 ### as const over enum
-```tsx
-const MESSAGE_ROLES = {
-  USER: "user",
-  ASSISTANT: "assistant",
-} as const
-
-type MessageRole = typeof MESSAGE_ROLES[keyof typeof MESSAGE_ROLES]
-```
-
-Enums compile into runtime objects and hurt tree-shaking. Always use
-`as const` with union types.
+Use `as const` objects with derived union types instead of enums.
+Enums compile into runtime objects and hurt tree-shaking.
 
 ### Utility types for data transformations
-Derive types from base types instead of duplicating:
-```tsx
-export interface Message {
-  readonly id: string
-  readonly chatId: string
-  readonly role: MessageRole
-  readonly content: string
-  readonly createdAt: Date
-}
-
-export type CreateMessageDTO = Omit<Message, "id" | "createdAt">
-export type UpdateMessageDTO = Partial<Pick<Message, "content">>
-```
+Derive types from base types using `Omit`, `Pick`, `Partial`, `Record`
+instead of duplicating interfaces. For example, a create DTO omits `id`
+and `createdAt` from the base type.
 
 ### Key practices
-- `readonly` for immutable data (API responses, props)
-- `ReadonlyArray<T>` for immutable arrays
 - `import type` for type-only imports
 - Generics in custom hooks and utility functions
-- Proper utility types (`Omit`, `Pick`, `Partial`, `Record`) over duplicated interfaces
+- Proper utility types over duplicated interfaces
 
-## Clean JSX
+## Component Conventions
 
-Keep JSX readable. Group Tailwind classes with `cn()`:
-```tsx
-const containerStyles = cn(
-  "flex items-center justify-between p-4",
-  "bg-white rounded-lg shadow-md",
-  "hover:shadow-lg transition-all duration-200"
-)
-```
+- **Arrow functions** for all components
+- **Pages/layouts**: `export default` at the bottom of the file
+- **Feature/entity components**: named export at the bottom
+- **Server Components** by default. Add `"use client"` only for hooks, events, browser APIs
+- Split when possible — server fetches data, passes to client component
 
-## Component Pattern
+## Styling
 
-1. Imports (with `import type` for types)
-2. Types (only if truly component-specific)
-3. Component function
-4. Export
+- Group Tailwind classes by concern in `cn()`: layout → appearance → state → interaction
+- All colors through CSS variables — custom theme breaks with hardcoded values
+- Use CSS variable classes (`bg-primary`, `text-foreground`) — never hardcode hex
+- Glow shadows on primary buttons: `shadow-lg shadow-[var(--glow-primary)]`
+- Transitions: `transition-all duration-200` for hover effects
 
-Use `"use client"` only for browser APIs, event handlers, or hooks.
-Server Components are the default.
+### Design tokens (default dark theme)
+
+- Background: `#0F0B1E`, Card: `#1A1530`, Border: `#2D2650`
+- Primary (amber): `#E8935A`, Secondary (violet): `#C17AEF`, Accent (blue): `#7B8CED`
+- Text: `#F0EBF4`, Muted text: `#9B8FB0`, Input bg: `#140F28`
+- Gradient: amber → violet → blue (buttons, logo, glow effects)
+- Glassmorphism: card bg 85% opacity + border 60% opacity + `backdrop-blur: 40px`
+- Radius: cards `rounded-3xl`, buttons/inputs `rounded-xl`, messages `rounded-2xl`
+
+### Responsive breakpoints
+
+| Breakpoint | Layout |
+|-----------|--------|
+| < 768px   | No sidebar, full-width chat, hamburger menu |
+| ≥ 768px   | Sidebar appears, two-column layout |
+| ≥ 1024px  | Wider sidebar, centered chat area |
+
+Use `h-[100dvh]` for full height (mobile browser chrome).
 
 ## Authentication
 
@@ -232,12 +209,25 @@ Read `references/backend.md` for full NextAuth configuration.
 
 ## Custom Themes
 
-Full color customization via color picker. Theme is stored in localStorage
-and applied on load. If no saved theme exists — default light theme is used.
+Full color customization via react-colorful color picker. Theme is stored
+in localStorage and applied on load. Blocking `<script>` in `<head>`
+prevents FOUC by reading localStorage before first render. Changes preview
+in real-time but persist only on Save button click. 4 built-in presets
+(Default, Midnight Ocean, Forest, Rose Gold) + individual color editing.
 
-Read `references/frontend.md` for theme system implementation.
+Read `references/frontend.md` for theme system details.
 
 ## AI Streaming
+
+Uses Vercel AI SDK v4 with important API differences from older versions:
+- `sendMessage({ text })` instead of `handleSubmit`
+- `status` field (`"ready" | "submitted" | "streaming" | "error"`) instead of `isLoading`
+- `message.parts` array with `{ type: "text", text }` instead of `.content`
+- `DefaultChatTransport` for configuring API endpoint
+- Server: `convertToModelMessages()` + `streamText()` → `toUIMessageStreamResponse()`
+
+After first message in a new chat, `onFinish` fetches `/api/chat/latest`
+and redirects to `/chat/[newChatId]` so subsequent messages go to the same chat.
 
 Read `references/backend.md` for Vercel AI SDK + Gemini setup and
 `references/frontend.md` for `useChat` hook patterns.
@@ -260,7 +250,7 @@ GOOGLE_CLIENT_SECRET=your-google-oauth-secret
 
 ## References
 
-- `references/frontend.md` — Shadcn/UI, chat UI patterns, component details
+- `references/frontend.md` — Shadcn/UI, chat UI patterns, theme system, responsive design
 - `references/backend.md` — API routes, NextAuth config, Vercel AI SDK
 - `references/testing.md` — test patterns for components, hooks, API routes
 
@@ -270,6 +260,8 @@ GOOGLE_CLIENT_SECRET=your-google-oauth-secret
 - Next.js: https://nextjs.org/docs
 - Shadcn/UI: https://ui.shadcn.com/docs
 - Vercel AI SDK: https://ai-sdk.dev/docs/introduction
+- Tailwind CSS v4: https://tailwindcss.com/docs
 - NextAuth: https://next-auth.js.org/getting-started/example
 - Mongoose: https://mongoosejs.com/
 - Google Gemini: https://ai.google.dev/
+- react-colorful: https://github.com/omgovich/react-colorful
