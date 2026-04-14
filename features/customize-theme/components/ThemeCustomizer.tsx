@@ -290,7 +290,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
           <Button
             className={cn(
               "flex-1 cursor-pointer rounded-xl",
-              "bg-gradient-to-r from-[var(--aurora-start)] to-[var(--aurora-mid)]",
+              "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
               "text-white shadow-md shadow-[var(--glow-primary)]",
               "hover:opacity-90 transition-all duration-200"
             )}

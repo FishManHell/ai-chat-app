@@ -20,7 +20,7 @@ A full-stack AI chat application built with Next.js, React, and Google Gemini. P
 - User authentication (email/password + Google OAuth)
 - Chat history management (create, delete)
 - Custom theme system with color picker and presets
-- Glassmorphism dark UI with aurora gradient accents
+- Glassmorphism dark UI with brand gradient accents
 - Responsive design (mobile, tablet, desktop)
 - Rate limiting and input sanitization
 

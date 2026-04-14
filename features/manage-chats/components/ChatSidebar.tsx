@@ -78,7 +78,7 @@ export function ChatSidebar({ chats, activeChatId }: Readonly<ChatSidebarProps>)
           onClick={handleNewChat}
           className={cn(
             "w-full cursor-pointer justify-start gap-2 rounded-xl",
-            "bg-gradient-to-r from-[var(--aurora-start)] to-[var(--aurora-mid)]",
+            "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
             "text-white shadow-md shadow-[var(--glow-primary)]",
             "hover:opacity-90 transition-all duration-200"
           )}

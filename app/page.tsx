@@ -51,7 +51,7 @@ const HomePage = () => {
             href="/chat"
             className={cn(
               "inline-flex h-12 items-center justify-center rounded-xl px-8",
-              "bg-gradient-to-r from-[var(--aurora-start)] to-[var(--aurora-mid)]",
+              "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
               "text-white font-semibold shadow-lg shadow-[var(--glow-primary)]",
               "hover:opacity-90 transition-all duration-200"
             )}

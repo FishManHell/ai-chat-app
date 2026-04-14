@@ -40,9 +40,9 @@
   --radius: 0.75rem;
 
   /* App gradient */
-  --aurora-start: #E8935A;
-  --aurora-mid: #C17AEF;
-  --aurora-end: #7B8CED;
+  --brand-start: #E8935A;
+  --brand-mid: #C17AEF;
+  --brand-end: #7B8CED;
 
   /* Glassmorphism */
   --glass-bg: rgba(26, 21, 48, 0.85);
