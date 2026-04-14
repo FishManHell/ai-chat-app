@@ -15,9 +15,7 @@ interface ChatDetailPageProps {
 const ChatDetailPage = async ({ params }: ChatDetailPageProps) => {
   const { chatId } = await params
 
-  if (!mongoose.Types.ObjectId.isValid(chatId)) {
-    notFound()
-  }
+  if (!mongoose.Types.ObjectId.isValid(chatId)) notFound()
 
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) {
@@ -31,9 +29,7 @@ const ChatDetailPage = async ({ params }: ChatDetailPageProps) => {
     userId: session.user.id,
   }).lean()
 
-  if (!chat) {
-    notFound()
-  }
+  if (!chat) notFound()
 
   const chats = await getChats()
 

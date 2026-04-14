@@ -5,11 +5,7 @@ export const metadata: Metadata = {
   title: "Chat — AI Chat",
 }
 
-const ChatLayout = ({
-  children,
-}: Readonly<{
-  children: ReactNode
-}>) => {
+const ChatLayout = ({children}: Readonly<{ children: ReactNode }>) => {
   return <>{children}</>
 }
 
