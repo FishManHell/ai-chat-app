@@ -15,19 +15,18 @@ export function RegisterForm() {
 
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault()
-    setIsLoading(true)
 
     const formData = new FormData(e.currentTarget)
     const username = formData.get("username") as string
     const email = formData.get("email") as string
     const password = formData.get("password") as string
-    const confirmPassword = formData.get("confirmPassword") as string
 
-    if (password !== confirmPassword) {
+    if (password !== formData.get("confirmPassword")) {
       toast.error("Passwords don't match")
-      setIsLoading(false)
       return
     }
+
+    setIsLoading(true)
 
     try {
       const res = await fetch("/api/auth/register", {
@@ -36,19 +35,13 @@ export function RegisterForm() {
         body: JSON.stringify({ username, email, password }),
       })
 
-      const data = await res.json()
-
       if (!res.ok) {
+        const data = await res.json()
         toast.error(data.message)
-        setIsLoading(false)
         return
       }
 
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      })
+      const result = await signIn("credentials", { email, password, redirect: false })
 
       if (result?.error) {
         toast.success("Account created! Please sign in.")

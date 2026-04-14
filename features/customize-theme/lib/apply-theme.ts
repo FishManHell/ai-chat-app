@@ -1,26 +1,9 @@
 import type { ThemeColors } from "@/entities/theme/types"
+import { CSS_VAR_MAP } from "./constants"
 
 export function applyThemeColors(colors: ThemeColors) {
   const root = document.documentElement
-  const mapping: Record<keyof ThemeColors, string> = {
-    background: "--background",
-    foreground: "--foreground",
-    card: "--card",
-    cardForeground: "--card-foreground",
-    primary: "--primary",
-    primaryForeground: "--primary-foreground",
-    secondary: "--secondary",
-    secondaryForeground: "--secondary-foreground",
-    muted: "--muted",
-    mutedForeground: "--muted-foreground",
-    accent: "--accent",
-    accentForeground: "--accent-foreground",
-    border: "--border",
-    input: "--input",
-    ring: "--ring",
-  }
-
-  for (const [key, cssVar] of Object.entries(mapping)) {
+  for (const [key, cssVar] of Object.entries(CSS_VAR_MAP)) {
     const value = colors[key as keyof ThemeColors]
     if (value) {
       root.style.setProperty(cssVar, value)
@@ -30,14 +13,8 @@ export function applyThemeColors(colors: ThemeColors) {
 
 export function resetThemeColors() {
   const root = document.documentElement
-  const vars = [
-    "--background", "--foreground", "--card", "--card-foreground",
-    "--primary", "--primary-foreground", "--secondary", "--secondary-foreground",
-    "--muted", "--muted-foreground", "--accent", "--accent-foreground",
-    "--border", "--input", "--ring",
-  ]
-  for (const v of vars) {
-    root.style.removeProperty(v)
+  for (const cssVar of Object.values(CSS_VAR_MAP)) {
+    root.style.removeProperty(cssVar)
   }
 }
 

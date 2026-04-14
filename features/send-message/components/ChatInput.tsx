@@ -23,20 +23,21 @@ export function ChatInput({ isLoading, onSend, onStop }: Readonly<ChatInputProps
     }
   }, [input])
 
-  function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    e.preventDefault()
+  function send() {
     if (!input.trim() || isLoading) return
     onSend(input.trim())
     setInput("")
   }
 
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+    e.preventDefault()
+    send()
+  }
+
   function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
-      if (input.trim() && !isLoading) {
-        onSend(input.trim())
-        setInput("")
-      }
+      send()
     }
   }
 
