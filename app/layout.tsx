@@ -1,41 +1,28 @@
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { cookies } from "next/headers"
 import { Toaster } from "@/shared/ui/sonner"
 import { SessionProvider } from "@/shared/lib/session-provider"
-import { ThemeProvider } from "@/entities/theme/components/ThemeProvider"
+import { inter } from "@/shared/config/fonts"
+import { parseThemeCookie } from "@/entities/theme/lib/parse-theme-cookie"
 import "./globals.css"
 import { ReactNode } from "react"
 
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
-})
+export { metadata } from "@/shared/config/metadata"
 
-export const metadata: Metadata = {
-  title: "AI Chat",
-  description: "Personal AI chat assistant powered by Google Gemini",
-}
-
-const RootLayout = ({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: ReactNode
 }>) => {
+  const cookieStore = await cookies()
+  const themeCookie = cookieStore.get("ai-chat-theme-colors")
+  const themeStyle = themeCookie ? parseThemeCookie(themeCookie.value) : undefined
+
   return (
-    <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("ai-chat-theme");if(t){var c=JSON.parse(t).colors,m={background:"--background",foreground:"--foreground",card:"--card",cardForeground:"--card-foreground",primary:"--primary",primaryForeground:"--primary-foreground",secondary:"--secondary",secondaryForeground:"--secondary-foreground",muted:"--muted",mutedForeground:"--muted-foreground",accent:"--accent",accentForeground:"--accent-foreground",border:"--border",input:"--input",ring:"--ring"};for(var k in m)if(c[k])document.documentElement.style.setProperty(m[k],c[k])}}catch(e){}})()`,
-          }}
-        />
-      </head>
+    <html lang="en" className={`${inter.variable} h-full`} style={themeStyle} suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background text-foreground antialiased" suppressHydrationWarning>
         <SessionProvider>
-          <ThemeProvider>
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          {children}
+          <Toaster />
         </SessionProvider>
       </body>
     </html>
