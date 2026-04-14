@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import {useState, useRef, useEffect, SyntheticEvent, KeyboardEvent} from "react"
 import { ArrowUp, Square } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
@@ -23,14 +23,14 @@ export function ChatInput({ isLoading, onSend, onStop }: Readonly<ChatInputProps
     }
   }, [input])
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault()
     if (!input.trim() || isLoading) return
     onSend(input.trim())
     setInput("")
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
       if (input.trim() && !isLoading) {
@@ -84,7 +84,7 @@ export function ChatInput({ isLoading, onSend, onStop }: Readonly<ChatInputProps
             disabled={!input.trim()}
             className={cn(
               "h-9 w-9 shrink-0 rounded-xl",
-              "bg-gradient-to-r from-[var(--aurora-start)] to-[var(--aurora-mid)]",
+              "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
               "text-white shadow-md shadow-[var(--glow-primary)]",
               "hover:opacity-90 transition-all duration-200",
               "disabled:opacity-40 disabled:shadow-none"

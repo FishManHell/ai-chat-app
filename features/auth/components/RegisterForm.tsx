@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import {SyntheticEvent, useState} from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -13,7 +13,7 @@ export function RegisterForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault()
     setIsLoading(true)
 
@@ -149,7 +149,7 @@ export function RegisterForm() {
         disabled={isLoading}
         className={cn(
           "h-11 rounded-xl font-semibold",
-          "bg-gradient-to-r from-[var(--aurora-start)] to-[var(--aurora-mid)]",
+          "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
           "text-white shadow-lg shadow-[var(--glow-primary)]",
           "hover:opacity-90 transition-all duration-200"
         )}
