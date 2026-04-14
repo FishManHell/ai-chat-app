@@ -9,24 +9,31 @@ interface RouteParams {
   params: Promise<{ chatId: string }>
 }
 
-export async function GET(_request: Request, { params }: RouteParams) {
+async function validateAndConnect(params: Promise<{ chatId: string }>) {
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    return { error: NextResponse.json({ message: "Unauthorized" }, { status: 401 }) }
   }
 
   const { chatId } = await params
 
   if (!mongoose.Types.ObjectId.isValid(chatId)) {
-    return NextResponse.json({ message: "Invalid chat ID" }, { status: 400 })
+    return { error: NextResponse.json({ message: "Invalid chat ID" }, { status: 400 }) }
   }
 
   await connectDB()
 
+  return { userId: session.user.id, chatId }
+}
+
+export async function GET(_request: Request, { params }: RouteParams) {
+  const result = await validateAndConnect(params)
+  if ("error" in result) return result.error
+
   const chat = await ChatModel.findOne({
-    _id: chatId,
-    userId: session.user.id,
+    _id: result.chatId,
+    userId: result.userId,
   })
 
   if (!chat) {
@@ -37,23 +44,12 @@ export async function GET(_request: Request, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteParams) {
-  const session = await getServerSession(authOptions)
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
-  }
-
-  const { chatId } = await params
-
-  if (!mongoose.Types.ObjectId.isValid(chatId)) {
-    return NextResponse.json({ message: "Invalid chat ID" }, { status: 400 })
-  }
-
-  await connectDB()
+  const result = await validateAndConnect(params)
+  if ("error" in result) return result.error
 
   const deleted = await ChatModel.findOneAndDelete({
-    _id: chatId,
-    userId: session.user.id,
+    _id: result.chatId,
+    userId: result.userId,
   })
 
   if (!deleted) {

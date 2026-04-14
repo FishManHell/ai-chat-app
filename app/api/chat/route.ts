@@ -65,9 +65,7 @@ export async function POST(request: Request) {
           }
         )
       } else {
-        const title = typeof sanitizedContent === "string"
-          ? sanitizedContent.slice(0, 50)
-          : "New Chat"
+        const title = sanitizedContent.slice(0, 50) || "New Chat"
 
         await ChatModel.create({
           userId: session.user.id,
