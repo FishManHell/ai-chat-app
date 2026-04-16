@@ -1,4 +1,4 @@
-import type { CustomTheme, ThemeColors } from "../types"
+import type { CustomTheme } from "../types"
 import { STORAGE_KEY } from "../types"
 
 const COOKIE_KEY = "ai-chat-theme-colors"

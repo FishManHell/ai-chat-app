@@ -24,12 +24,12 @@ export function PresetCard({ preset, onSelect }: Readonly<PresetCardProps>) {
         {PREVIEW_KEYS.map((key) => (
           <div
             key={key}
-            className="h-4 w-4 rounded-full border border-border"
+            className="border-border h-4 w-4 rounded-full border"
             style={{ background: `hsl(${preset.colors[key]})` }}
           />
         ))}
       </div>
-      <span className="text-xs text-foreground">{preset.name}</span>
+      <span className="text-foreground text-xs">{preset.name}</span>
     </button>
   )
 }

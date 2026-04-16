@@ -19,13 +19,13 @@ export function SidebarUser({ onThemeOpen }: Readonly<SidebarUserProps>) {
         image={session?.user?.image}
         className="h-8 w-8"
       />
-      <span className="flex-1 truncate text-sm text-foreground">
+      <span className="text-foreground flex-1 truncate text-sm">
         {session?.user?.name ?? session?.user?.email}
       </span>
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 cursor-pointer text-muted-foreground hover:text-primary"
+        className="text-muted-foreground hover:text-primary h-8 w-8 cursor-pointer"
         onClick={onThemeOpen}
       >
         <Palette className="h-4 w-4" />
@@ -33,7 +33,7 @@ export function SidebarUser({ onThemeOpen }: Readonly<SidebarUserProps>) {
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 cursor-pointer text-muted-foreground hover:text-destructive"
+        className="text-muted-foreground hover:text-destructive h-8 w-8 cursor-pointer"
         onClick={() => signOut({ callbackUrl: "/login" })}
       >
         <LogOut className="h-4 w-4" />

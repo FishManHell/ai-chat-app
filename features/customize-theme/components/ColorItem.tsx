@@ -21,10 +21,10 @@ export function ColorItem({ colorKey, hslValue, isActive, onToggle }: Readonly<C
       )}
     >
       <div
-        className="h-5 w-5 shrink-0 rounded-md border border-border"
+        className="border-border h-5 w-5 shrink-0 rounded-md border"
         style={{ background: `hsl(${hslValue})` }}
       />
-      <span className="text-sm text-foreground">
+      <span className="text-foreground text-sm">
         {COLOR_LABELS[colorKey]}
       </span>
     </button>

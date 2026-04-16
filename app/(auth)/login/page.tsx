@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 const LoginPage = () => {
   return (
     <div>
-      <h2 className="mb-1 text-2xl font-bold text-foreground">Welcome back</h2>
-      <p className="mb-6 text-sm text-muted-foreground">
+      <h2 className="text-foreground mb-1 text-2xl font-bold">Welcome back</h2>
+      <p className="text-muted-foreground mb-6 text-sm">
         Sign in to continue your conversations
       </p>
       <LoginForm />

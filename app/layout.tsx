@@ -19,7 +19,7 @@ const RootLayout = async ({
 
   return (
     <html lang="en" className={`${inter.variable} h-full`} style={themeStyle} suppressHydrationWarning>
-      <body className="min-h-full flex flex-col bg-background text-foreground antialiased" suppressHydrationWarning>
+      <body className="bg-background text-foreground flex min-h-full flex-col antialiased" suppressHydrationWarning>
         <SessionProvider>
           {children}
           <Toaster />

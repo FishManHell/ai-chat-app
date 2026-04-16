@@ -5,9 +5,9 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { toast } from "sonner"
-import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
+import { styles } from "./auth.styles"
 
 export function RegisterForm() {
   const router = useRouter()
@@ -59,7 +59,7 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <label htmlFor="username" className="text-sm font-medium text-foreground">
+        <label htmlFor="username" className="text-foreground text-sm font-medium">
           Username
         </label>
         <Input
@@ -70,16 +70,12 @@ export function RegisterForm() {
           required
           maxLength={30}
           disabled={isLoading}
-          className={cn(
-            "h-11 rounded-xl border-input-border bg-input",
-            "placeholder:text-muted-foreground",
-            "focus:border-primary focus:ring-primary"
-          )}
+          className={styles.input}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="text-sm font-medium text-foreground">
+        <label htmlFor="email" className="text-foreground text-sm font-medium">
           Email
         </label>
         <Input
@@ -89,16 +85,12 @@ export function RegisterForm() {
           placeholder="you@example.com"
           required
           disabled={isLoading}
-          className={cn(
-            "h-11 rounded-xl border-input-border bg-input",
-            "placeholder:text-muted-foreground",
-            "focus:border-primary focus:ring-primary"
-          )}
+          className={styles.input}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="password" className="text-sm font-medium text-foreground">
+        <label htmlFor="password" className="text-foreground text-sm font-medium">
           Password
         </label>
         <Input
@@ -109,16 +101,12 @@ export function RegisterForm() {
           required
           minLength={6}
           disabled={isLoading}
-          className={cn(
-            "h-11 rounded-xl border-input-border bg-input",
-            "placeholder:text-muted-foreground",
-            "focus:border-primary focus:ring-primary"
-          )}
+          className={styles.input}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
+        <label htmlFor="confirmPassword" className="text-foreground text-sm font-medium">
           Confirm Password
         </label>
         <Input
@@ -129,30 +117,21 @@ export function RegisterForm() {
           required
           minLength={6}
           disabled={isLoading}
-          className={cn(
-            "h-11 rounded-xl border-input-border bg-input",
-            "placeholder:text-muted-foreground",
-            "focus:border-primary focus:ring-primary"
-          )}
+          className={styles.input}
         />
       </div>
 
       <Button
         type="submit"
         disabled={isLoading}
-        className={cn(
-          "h-11 rounded-xl font-semibold",
-          "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
-          "text-white shadow-lg shadow-[var(--glow-primary)]",
-          "hover:opacity-90 transition-all duration-200"
-        )}
+        className={styles.submitButton}
       >
         {isLoading ? "Creating account..." : "Create Account"}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm">
         Already have an account?{" "}
-        <Link href="/login" className="text-primary hover:underline font-medium">
+        <Link href="/login" className="text-primary font-medium hover:underline">
           Sign In
         </Link>
       </p>

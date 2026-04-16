@@ -4,7 +4,7 @@ import { glassStyle } from "./styles"
 
 const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
-    <div className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0F0B1E] to-[#1A1040] px-4">
+    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-linear-to-br from-[#0F0B1E] to-[#1A1040] px-4">
       <GlowBlob color="#C17AEF" className="-top-32 right-0 opacity-20" />
       <GlowBlob color="#E8935A" className="-bottom-32 left-0 opacity-25" />
 
@@ -13,9 +13,9 @@ const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
         <div className="hidden flex-col gap-6 lg:flex">
           <div className="flex items-center gap-3">
             <BrandOrb />
-            <h1 className="text-5xl font-bold text-foreground">AI Chat</h1>
+            <h1 className="text-foreground text-5xl font-bold">AI Chat</h1>
           </div>
-          <p className="max-w-xs text-lg text-muted-foreground">
+          <p className="text-muted-foreground max-w-xs text-lg">
             Your personal AI assistant, powered by Gemini.
           </p>
           <div className="flex gap-2">
@@ -30,7 +30,7 @@ const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
           {/* Mobile logo */}
           <div className="mb-6 flex items-center justify-center gap-2 lg:hidden">
             <BrandOrb size="h-8 w-8" />
-            <span className="text-2xl font-bold text-foreground">AI Chat</span>
+            <span className="text-foreground text-2xl font-bold">AI Chat</span>
           </div>
 
           {children}

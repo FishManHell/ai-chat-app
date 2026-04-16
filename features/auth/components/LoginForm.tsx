@@ -5,10 +5,10 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { toast } from "sonner"
-import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { GoogleIcon } from "@/shared/ui/google-icon"
+import { styles } from "./auth.styles"
 
 export function LoginForm() {
   const router = useRouter()
@@ -47,7 +47,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="text-sm font-medium text-foreground">
+        <label htmlFor="email" className="text-foreground text-sm font-medium">
           Email
         </label>
         <Input
@@ -57,16 +57,12 @@ export function LoginForm() {
           placeholder="you@example.com"
           required
           disabled={isLoading}
-          className={cn(
-            "h-11 rounded-xl border-input-border bg-input",
-            "placeholder:text-muted-foreground",
-            "focus:border-primary focus:ring-primary"
-          )}
+          className={styles.input}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="password" className="text-sm font-medium text-foreground">
+        <label htmlFor="password" className="text-foreground text-sm font-medium">
           Password
         </label>
         <Input
@@ -77,31 +73,22 @@ export function LoginForm() {
           required
           minLength={6}
           disabled={isLoading}
-          className={cn(
-            "h-11 rounded-xl border-input-border bg-input",
-            "placeholder:text-muted-foreground",
-            "focus:border-primary focus:ring-primary"
-          )}
+          className={styles.input}
         />
       </div>
 
       <Button
         type="submit"
         disabled={isLoading}
-        className={cn(
-          "h-11 rounded-xl font-semibold",
-          "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
-          "text-white shadow-lg shadow-[var(--glow-primary)]",
-          "hover:opacity-90 transition-all duration-200"
-        )}
+        className={styles.submitButton}
       >
         {isLoading ? "Signing in..." : "Sign In"}
       </Button>
 
       <div className="relative flex items-center gap-4 py-2">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-xs text-muted-foreground">or</span>
-        <div className="h-px flex-1 bg-border" />
+        <div className="bg-border h-px flex-1" />
+        <span className="text-muted-foreground text-xs">or</span>
+        <div className="bg-border h-px flex-1" />
       </div>
 
       <Button
@@ -109,19 +96,15 @@ export function LoginForm() {
         variant="outline"
         disabled={isGoogleLoading}
         onClick={handleGoogleSignIn}
-        className={cn(
-          "h-11 rounded-xl bg-input border-input-border",
-          "text-foreground font-medium",
-          "hover:bg-muted transition-all duration-200"
-        )}
+        className={styles.googleButton}
       >
         <GoogleIcon className="mr-2 h-4 w-4" />
         {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-primary hover:underline font-medium">
+        <Link href="/register" className="text-primary font-medium hover:underline">
           Sign Up
         </Link>
       </p>

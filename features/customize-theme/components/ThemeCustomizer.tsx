@@ -3,8 +3,9 @@
 import { useState } from "react"
 import { HexColorPicker } from "react-colorful"
 import { Palette, RotateCcw, X } from "lucide-react"
-import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
+
+import { styles } from "./ThemeCustomizer.styles"
 import { Separator } from "@/shared/ui/separator"
 import { ScrollArea } from "@/shared/ui/scroll-area"
 import type { ThemeColors, CustomTheme } from "@/entities/theme/types"
@@ -63,17 +64,13 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
     <>
       <div className="fixed inset-0 z-50 bg-black/50" onClick={onClose} />
 
-      <div className={cn(
-        "fixed right-0 top-0 z-50 flex h-full w-80 flex-col",
-        "border-l border-border bg-card/95 backdrop-blur-xl",
-        "animate-in slide-in-from-right duration-300"
-      )}>
+      <div className={styles.panel}>
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
-            <Palette className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">Theme</h2>
+            <Palette className="text-primary h-5 w-5" />
+            <h2 className="text-foreground text-lg font-semibold">Theme</h2>
           </div>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={onClose}>
+          <Button variant="ghost" size="icon" className="text-muted-foreground h-8 w-8" onClick={onClose}>
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -83,7 +80,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
         <ScrollArea className="flex-1">
           <div className="flex flex-col gap-4 p-4">
             <div>
-              <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Presets</p>
+              <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">Presets</p>
               <div className="grid grid-cols-2 gap-2">
                 {PRESETS.map((preset) => (
                   <PresetCard key={preset.name} preset={preset} onSelect={handlePreset} />
@@ -94,7 +91,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
             <Separator className="bg-border" />
 
             <div>
-              <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Customize</p>
+              <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">Customize</p>
               <div className="flex flex-col gap-1">
                 {(Object.keys(COLOR_LABELS) as Array<keyof ThemeColors>).map((key) => (
                   <ColorItem
@@ -114,7 +111,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
                     onChange={handleColorChange}
                     style={{ width: "100%" }}
                   />
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     {hslToHex(colors[activeColor])}
                   </span>
                 </div>
@@ -128,19 +125,14 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
         <div className="flex gap-2 p-4">
           <Button
             variant="outline"
-            className="flex-1 cursor-pointer gap-1 rounded-xl border-border bg-input text-foreground"
+            className="border-border bg-input text-foreground flex-1 cursor-pointer gap-1 rounded-xl"
             onClick={handleReset}
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Reset
           </Button>
           <Button
-            className={cn(
-              "flex-1 cursor-pointer rounded-xl",
-              "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
-              "text-white shadow-md shadow-[var(--glow-primary)]",
-              "hover:opacity-90 transition-all duration-200"
-            )}
+            className={styles.saveButton}
             onClick={handleSave}
           >
             Save

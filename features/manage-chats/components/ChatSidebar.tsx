@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation"
 import { Plus, Menu } from "lucide-react"
 import { ThemeCustomizer } from "@/features/customize-theme/components/ThemeCustomizer"
 import { toast } from "sonner"
-import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
+import { sidebarPanel, newChatButton } from "./ChatSidebar.styles"
 import { ScrollArea } from "@/shared/ui/scroll-area"
 import { Separator } from "@/shared/ui/separator"
 import { ChatItem } from "@/entities/chat/components/ChatItem"
@@ -52,7 +52,7 @@ export function ChatSidebar({ chats, activeChatId }: Readonly<ChatSidebarProps>)
       <Button
         variant="ghost"
         size="icon"
-        className="fixed left-3 top-3 z-50 md:hidden text-foreground"
+        className="text-foreground fixed top-3 left-3 z-50 md:hidden"
         onClick={() => setIsOpen(true)}
       >
         <Menu className="h-5 w-5" />
@@ -67,27 +67,11 @@ export function ChatSidebar({ chats, activeChatId }: Readonly<ChatSidebarProps>)
 
       <ThemeCustomizer isOpen={isThemeOpen} onClose={() => setIsThemeOpen(false)} />
 
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border",
-          "bg-card/80 backdrop-blur-xl",
-          "transition-transform duration-300",
-          "md:static md:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
+      <aside className={sidebarPanel(isOpen)}>
         <SidebarHeader onClose={() => setIsOpen(false)} />
 
         <div className="px-3 pb-2">
-          <Button
-            onClick={handleNewChat}
-            className={cn(
-              "w-full cursor-pointer justify-start gap-2 rounded-xl",
-              "bg-gradient-to-r from-[var(--brand-start)] to-[var(--brand-mid)]",
-              "text-white shadow-md shadow-[var(--glow-primary)]",
-              "hover:opacity-90 transition-all duration-200"
-            )}
-          >
+          <Button onClick={handleNewChat} className={newChatButton}>
             <Plus className="h-4 w-4" />
             New Chat
           </Button>
@@ -98,7 +82,7 @@ export function ChatSidebar({ chats, activeChatId }: Readonly<ChatSidebarProps>)
         <ScrollArea className="flex-1 px-2 py-2">
           <div className="flex flex-col gap-0.5">
             {chats.length === 0 ? (
-              <p className="px-3 py-8 text-center text-sm text-muted-foreground">
+              <p className="text-muted-foreground px-3 py-8 text-center text-sm">
                 No conversations yet
               </p>
             ) : (
