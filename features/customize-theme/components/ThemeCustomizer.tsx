@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { HexColorPicker } from "react-colorful"
 import { Palette, RotateCcw, X } from "lucide-react"
 import { Button } from "@/shared/ui/button"
@@ -26,6 +26,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
     return saved ? saved.colors : DEFAULT_COLORS
   })
   const [activeColor, setActiveColor] = useState<keyof ThemeColors | null>(null)
+  const savedColorsRef = useRef<ThemeColors>(colors)
 
   function handleColorChange(hex: string) {
     if (!activeColor) return
@@ -38,12 +39,19 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
   function handlePreset(theme: CustomTheme) {
     setColors(theme.colors)
     applyThemeColors(theme.colors)
-    saveTheme(theme)
     setActiveColor(null)
   }
 
   function handleSave() {
     saveTheme({ name: "Custom", colors })
+    savedColorsRef.current = colors
+    onClose()
+  }
+
+  function handleClose() {
+    setColors(savedColorsRef.current)
+    applyThemeColors(savedColorsRef.current)
+    setActiveColor(null)
     onClose()
   }
 
@@ -51,6 +59,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
     removeSavedTheme()
     resetThemeColors()
     setColors(DEFAULT_COLORS)
+    savedColorsRef.current = DEFAULT_COLORS
     setActiveColor(null)
   }
 
@@ -62,7 +71,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/50" onClick={onClose} />
+      <div className="fixed inset-0 z-50 bg-black/50" onClick={handleClose} />
 
       <div className={styles.panel}>
         <div className="flex items-center justify-between p-4">
@@ -70,7 +79,7 @@ export function ThemeCustomizer({ isOpen, onClose }: Readonly<ThemeCustomizerPro
             <Palette className="text-primary h-5 w-5" />
             <h2 className="text-foreground text-lg font-semibold">Theme</h2>
           </div>
-          <Button variant="ghost" size="icon" className="text-muted-foreground h-8 w-8" onClick={onClose}>
+          <Button variant="ghost" size="icon" className="text-muted-foreground h-8 w-8" onClick={handleClose}>
             <X className="h-4 w-4" />
           </Button>
         </div>
